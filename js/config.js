@@ -1,7 +1,7 @@
 // js/config.js
 export const APP_CONFIG = {
-  SUPABASE_URL: "PASTE_YOUR_PROJECT_URL_HERE",
-  SUPABASE_ANON_KEY: "PASTE_YOUR_PUBLISHABLE_KEY_HERE",
+  SUPABASE_URL: "https://lssfrccwpcdcctgsjysq.supabase.co/rest/v1/",
+  SUPABASE_ANON_KEY: "sb_publishable_hQAOU5ecpko6Ujbkdwx9WA_UUMyvy6i",
   TURNSTILE_SITE_KEY: "YOUR_CLOUDFLARE_TURNSTILE_SITE_KEY", // We will get this next
 };
 
