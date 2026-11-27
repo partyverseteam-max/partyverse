@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PartyVerse — Friends-First Mini-Games</title>
+  <link rel="stylesheet" href="./css/style.css" />
+  <script
+    src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+    async
+    defer
+  ></script>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">PV</span>
+          <span class="brand-name">PartyVerse</span>
+        </div>
+
+        <div id="status-pill" class="status-pill" role="status" aria-live="polite">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span id="status-auth">Checking session...</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="app-main">
+      <!-- Guest Sign-In & Turnstile Area (Preserves Phase 0 Auth DOM) -->
+      <section id="auth-card" class="auth-card" aria-labelledby="auth-heading">
+        <div class="auth-card-head">
+          <div>
+            <h2 id="auth-heading" class="auth-title">Guest Access</h2>
+            <p class="auth-subtitle">
+              No account or password needed. Verify below to start a temporary guest session.
+            </p>
+          </div>
+          <span class="pill pill--purple">Guest Mode</span>
+        </div>
+
+        <div class="turnstile-wrap">
+          <div id="turnstile-box"></div>
+          <div class="turnstile-status">
+            Verification: <span id="status-turnstile">Waiting...</span>
+          </div>
+        </div>
+
+        <button id="btn-signin" type="button" class="btn btn--primary btn--full" disabled>
+          Continue as Guest
+        </button>
+
+        <div id="log-output" class="auth-feedback" role="status" aria-live="polite">
+          Checking guest session...
+        </div>
+      </section>
+
+      <!-- View 1: Lobby -->
+      <section id="view-lobby" class="view is-active" aria-labelledby="lobby-heading">
+        <div class="welcome-banner">
+          <span class="welcome-kicker">Private Friends Hub</span>
+          <h1 id="lobby-heading" class="welcome-title">Welcome to PartyVerse</h1>
+          <p class="welcome-copy">
+            Host private mini-game rooms for 2–10 friends with zero sign-ups. Room creation and live lobbies arrive in the next phase.
+          </p>
+        </div>
+
+        <div class="action-grid">
+          <article class="action-card">
+            <div class="action-card-top">
+              <div class="action-icon action-icon--purple" aria-hidden="true">🏠</div>
+              <div>
+                <h2 class="action-title">Create Room</h2>
+                <p class="action-desc">
+                  Start a private party room and share a short invite code with your friends.
+                </p>
+              </div>
+            </div>
+            <button type="button" class="btn btn--primary btn--full" disabled aria-disabled="true">
+              Create Room (Phase 2)
+            </button>
+          </article>
+
+          <article class="action-card">
+            <div class="action-card-top">
+              <div class="action-icon action-icon--blue" aria-hidden="true">🎟️</div>
+              <div>
+                <h2 class="action-title">Join Room</h2>
+                <p class="action-desc">
+                  Enter a friend's room code to jump straight into their lobby.
+                </p>
+              </div>
+            </div>
+            <button type="button" class="btn btn--secondary btn--full" disabled aria-disabled="true">
+              Join Room (Phase 2)
+            </button>
+          </article>
+        </div>
+
+        <div class="card card--dashed empty-state">
+          <div class="empty-state-icon" aria-hidden="true">🛋️</div>
+          <h2 class="empty-state-title">You are not in a room yet</h2>
+          <p class="empty-state-desc">
+            Once rooms are enabled, your active lobby and invited players will appear here.
+          </p>
+        </div>
+      </section>
+
+      <!-- View 2: Games -->
+      <section id="view-games" class="view" aria-labelledby="games-heading">
+        <div class="section-head">
+          <h1 id="games-heading" class="section-title">Mini-Games</h1>
+          <p class="section-subtitle">
+            Browse the PartyVerse lineup. Game launchers will unlock once rooms are connected.
+          </p>
+        </div>
+
+        <div class="games-grid">
+          <!-- Quiz Battle -->
+          <article class="game-card game-card--available">
+            <div class="game-card-top">
+              <div class="game-head-left">
+                <div class="game-icon game-icon--quiz" aria-hidden="true">⚡</div>
+                <div>
+                  <h2 class="game-title">Quiz Battle</h2>
+                  <p class="game-mode">Fast-Paced Trivia</p>
+                </div>
+              </div>
+              <span class="pill pill--purple">Launch Lineup</span>
+            </div>
+
+            <p class="game-desc">
+              Race against friends in timed trivia rounds where speed and accuracy decide the leaderboard.
+            </p>
+
+            <div class="game-tags">
+              <span class="pill pill--blue">2–10 Players</span>
+              <span class="pill pill--muted">Simultaneous Rounds</span>
+            </div>
+
+            <div class="game-footer">
+              <span>Playable via rooms in upcoming phase</span>
+              <span class="pill pill--muted">Preview Only</span>
+            </div>
+          </article>
+
+          <!-- Tic-Tac-Toe Tournament -->
+          <article class="game-card game-card--available">
+            <div class="game-card-top">
+              <div class="game-head-left">
+                <div class="game-icon game-icon--ttt" aria-hidden="true">❌</div>
+                <div>
+                  <h2 class="game-title">Tic-Tac-Toe Tournament</h2>
+                  <p class="game-mode">1v1 Bracket Showdown</p>
+                </div>
+              </div>
+              <span class="pill pill--purple">Launch Lineup</span>
+            </div>
+
+            <p class="game-desc">
+              Quick head-to-head matches arranged in a knockout bracket until one champion remains.
+            </p>
+
+            <div class="game-tags">
+              <span class="pill pill--blue">2–8 Players</span>
+              <span class="pill pill--muted">Turn-Based Bracket</span>
+            </div>
+
+            <div class="game-footer">
+              <span>Playable via rooms in upcoming phase</span>
+              <span class="pill pill--muted">Preview Only</span>
+            </div>
+          </article>
+
+          <!-- Impostor Word (Coming Soon) -->
+          <article class="game-card game-card--upcoming">
+            <div class="game-card-top">
+              <div class="game-head-left">
+                <div class="game-icon game-icon--upcoming" aria-hidden="true">🕵️</div>
+                <div>
+                  <h2 class="game-title">Impostor Word</h2>
+                  <p class="game-mode">Social Deduction</p>
+                </div>
+              </div>
+              <span class="pill pill--upcoming">Coming Soon</span>
+            </div>
+
+            <p class="game-desc">
+              Everyone shares a secret word except the impostors. Give subtle clues and vote out the bluffers.
+            </p>
+
+            <div class="game-tags">
+              <span class="pill pill--muted">3–10 Players</span>
+              <span class="pill pill--muted">Planned Expansion</span>
+            </div>
+
+            <div class="game-footer">
+              <span>Scheduled after launch games</span>
+              <span class="pill pill--upcoming">Coming Soon</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- View 3: Profile -->
+      <section id="view-profile" class="view" aria-labelledby="profile-heading">
+        <div class="section-head">
+          <h1 id="profile-heading" class="section-title">Guest Profile</h1>
+          <p class="section-subtitle">
+            Preview your display name and avatar. Profile changes are not permanently saved yet.
+          </p>
+        </div>
+
+        <div class="profile-stack">
+          <!-- Nickname & Avatar Preview -->
+          <article class="card">
+            <div class="profile-preview">
+              <div id="profile-avatar-preview" class="profile-avatar-lg" aria-hidden="true">🦊</div>
+              <div class="profile-identity">
+                <h2 id="profile-display-name" class="profile-name">Guest Player</h2>
+                <p class="profile-note">Local UI preview only — not saved to the server yet.</p>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="input-nickname" class="field-label">Nickname</label>
+              <input
+                id="input-nickname"
+                class="field-input"
+                type="text"
+                maxlength="20"
+                autocomplete="off"
+                placeholder="Enter a nickname (preview only)"
+              />
+              <span class="field-hint">
+                Up to 20 characters. Saving nicknames to your guest profile will be added in Phase 2.
+              </span>
+            </div>
+
+            <div class="field">
+              <span class="field-label">Preset Avatar</span>
+              <div id="avatar-grid" class="avatar-grid" role="radiogroup" aria-label="Choose a preset avatar">
+                <button type="button" class="avatar-option is-selected" data-avatar="🦊" aria-pressed="true" aria-label="Fox avatar">🦊</button>
+                <button type="button" class="avatar-option" data-avatar="🐼" aria-pressed="false" aria-label="Panda avatar">🐼</button>
+                <button type="button" class="avatar-option" data-avatar="🐙" aria-pressed="false" aria-label="Octopus avatar">🐙</button>
+                <button type="button" class="avatar-option" data-avatar="🦉" aria-pressed="false" aria-label="Owl avatar">🦉</button>
+                <button type="button" class="avatar-option" data-avatar="👾" aria-pressed="false" aria-label="Alien avatar">👾</button>
+                <button type="button" class="avatar-option" data-avatar="🤖" aria-pressed="false" aria-label="Robot avatar">🤖</button>
+                <button type="button" class="avatar-option" data-avatar="🐯" aria-pressed="false" aria-label="Tiger avatar">🐯</button>
+                <button type="button" class="avatar-option" data-avatar="🐸" aria-pressed="false" aria-label="Frog avatar">🐸</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Recovery PIN Visual Placeholder -->
+          <article class="card pin-card" aria-labelledby="pin-heading">
+            <div class="pin-card-head">
+              <h2 id="pin-heading" class="pin-title">8-Digit Recovery PIN</h2>
+              <span class="pill pill--upcoming">Placeholder</span>
+            </div>
+            <p class="pin-desc">
+              In a future phase, an optional 8-digit PIN will let you restore your guest profile on another device. PIN generation and storage are not active yet.
+            </p>
+            <div class="pin-slots" aria-label="Recovery PIN not yet generated">
+              <span class="pin-slot" aria-hidden="true">–</span>
+              <span class="pin-slot" aria-hidden="true">–</span>
+              <span class="pin-slot" aria-hidden="true">–</span>
+              <span class="pin-slot" aria-hidden="true">–</span>
+              <span class="pin-slot" aria-hidden="true">–</span>
+              <span class="pin-slot" aria-hidden="true">–</span>
+              <span class="pin-slot" aria-hidden="true">–</span>
+              <span class="pin-slot" aria-hidden="true">–</span>
+            </div>
+          </article>
+
+          <!-- Guest Session Info & Sign-Out -->
+          <article class="card session-card" aria-labelledby="session-heading">
+            <h2 id="session-heading" class="pin-title">Guest Session</h2>
+            <div class="session-row">
+              <span class="session-label">Config</span>
+              <span id="status-config" class="session-value">Checking...</span>
+            </div>
+            <div class="session-row">
+              <span class="session-label">Client</span>
+              <span id="status-client" class="session-value">Checking...</span>
+            </div>
+            <button id="btn-signout" type="button" class="btn btn--danger btn--full" hidden>
+              Sign Out of Guest Session
+            </button>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav" aria-label="Primary navigation">
+      <div class="bottom-nav-inner">
+        <button type="button" class="nav-btn is-active" data-view="lobby" aria-current="page">
+          <span class="nav-icon" aria-hidden="true">🏠</span>
+          <span class="nav-label">Lobby</span>
+        </button>
+        <button type="button" class="nav-btn" data-view="games">
+          <span class="nav-icon" aria-hidden="true">🎮</span>
+          <span class="nav-label">Games</span>
+        </button>
+        <button type="button" class="nav-btn" data-view="profile">
+          <span class="nav-icon" aria-hidden="true">👤</span>
+          <span class="nav-label">Profile</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>
