@@ -1,0 +1,442 @@
+/* ==========================================================================
+   PartyVerse — Stage D1.3: Reusable UI Components (.pv-* namespace)
+   Uses --pv-* tokens from css/tokens.css. Zero global resets.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Brand Lockup
+   -------------------------------------------------------------------------- */
+
+.pv-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--pv-space-12);
+  min-width: 0;
+}
+
+.pv-brand-logo {
+  width: 34px;
+  height: 34px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.pv-brand-wordmark {
+  height: 32px;
+  width: auto;
+  display: block;
+}
+
+.pv-brand-tagline {
+  font-size: var(--pv-text-xs);
+  color: var(--pv-text-secondary);
+  letter-spacing: var(--pv-tracking-wide);
+}
+
+/* --------------------------------------------------------------------------
+   2. Buttons (44–48px Touch Targets, GPU-Only Transitions)
+   -------------------------------------------------------------------------- */
+
+.pv-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pv-space-8);
+  min-height: var(--pv-touch-comfortable);
+  padding: var(--pv-space-12) var(--pv-space-16);
+  border-radius: var(--pv-radius-md);
+  border: 1px solid transparent;
+  font-family: var(--pv-font-sans);
+  font-size: var(--pv-text-base);
+  font-weight: var(--pv-weight-semibold);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform var(--pv-duration-fast) var(--pv-ease-out),
+    opacity var(--pv-duration-fast) var(--pv-ease-out);
+}
+
+.pv-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.pv-btn:focus-visible {
+  outline: var(--pv-focus-outline);
+  outline-offset: var(--pv-focus-offset);
+  box-shadow: var(--pv-focus-ring);
+}
+
+.pv-btn:disabled,
+.pv-btn.is-disabled {
+  opacity: var(--pv-state-disabled-opacity);
+  cursor: not-allowed;
+}
+
+.pv-btn--primary {
+  background: var(--pv-gradient-brand);
+  color: var(--pv-text-on-accent);
+  box-shadow: var(--pv-glow-violet);
+}
+
+.pv-btn--secondary {
+  background: var(--pv-surface-elevated);
+  border-color: var(--pv-border-default);
+  color: var(--pv-text-primary);
+}
+
+.pv-btn--ghost {
+  background: transparent;
+  color: var(--pv-text-secondary);
+}
+
+.pv-btn--danger {
+  background: var(--pv-color-error-soft);
+  border-color: var(--pv-color-error-border);
+  color: var(--pv-color-error-text);
+}
+
+.pv-btn--sm {
+  min-height: 36px;
+  padding: var(--pv-space-8) var(--pv-space-12);
+  border-radius: var(--pv-radius-sm);
+  font-size: var(--pv-text-sm);
+}
+
+.pv-btn--full {
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   3. Inputs & Form Fields
+   -------------------------------------------------------------------------- */
+
+.pv-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pv-space-8);
+}
+
+.pv-label {
+  font-size: var(--pv-text-sm);
+  font-weight: var(--pv-weight-semibold);
+  color: var(--pv-text-primary);
+}
+
+.pv-input {
+  width: 100%;
+  min-height: var(--pv-touch-comfortable);
+  padding: var(--pv-space-12) var(--pv-space-16);
+  border-radius: var(--pv-radius-md);
+  border: 1px solid var(--pv-border-default);
+  background: var(--pv-surface-input);
+  color: var(--pv-text-primary);
+  font-family: var(--pv-font-sans);
+  font-size: var(--pv-text-base);
+}
+
+.pv-input--code {
+  font-family: var(--pv-font-mono);
+  letter-spacing: var(--pv-tracking-code);
+  text-transform: uppercase;
+}
+
+.pv-input:focus-visible {
+  outline: none;
+  border-color: var(--pv-focus-color);
+  box-shadow: var(--pv-focus-ring);
+}
+
+.pv-hint {
+  font-size: var(--pv-text-xs);
+  color: var(--pv-text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   4. Cards & Surfaces
+   -------------------------------------------------------------------------- */
+
+.pv-card {
+  background: var(--pv-surface-card);
+  border: 1px solid var(--pv-border-subtle);
+  border-radius: var(--pv-radius-lg);
+  padding: var(--pv-space-16);
+  box-shadow: var(--pv-shadow-md);
+}
+
+.pv-card--elevated {
+  background: var(--pv-gradient-surface-elevated);
+  border-color: var(--pv-border-default);
+}
+
+.pv-card--dashed {
+  background: rgba(23, 29, 50, 0.55);
+  border-style: dashed;
+  border-color: var(--pv-border-strong);
+  box-shadow: none;
+}
+
+.pv-card--hero {
+  background: linear-gradient(
+    135deg,
+    rgba(135, 87, 247, 0.2) 0%,
+    rgba(36, 198, 183, 0.14) 55%,
+    rgba(66, 214, 232, 0.12) 100%
+  );
+  border-color: var(--pv-brand-violet-border);
+  box-shadow: var(--pv-glow-violet);
+}
+
+/* --------------------------------------------------------------------------
+   5. Badges & Status Pills
+   -------------------------------------------------------------------------- */
+
+.pv-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--pv-space-4);
+  padding: var(--pv-space-4) var(--pv-space-12);
+  border-radius: var(--pv-radius-pill);
+  font-size: var(--pv-text-xs);
+  font-weight: var(--pv-weight-semibold);
+  white-space: nowrap;
+  border: 1px solid var(--pv-border-subtle);
+  color: var(--pv-text-secondary);
+  background: var(--pv-surface-elevated);
+}
+
+.pv-badge--violet {
+  background: var(--pv-brand-violet-soft);
+  border-color: var(--pv-brand-violet-border);
+  color: #C4B5FD;
+}
+
+.pv-badge--teal {
+  background: var(--pv-brand-teal-soft);
+  border-color: var(--pv-brand-teal-border);
+  color: #5EEAD4;
+}
+
+.pv-badge--cyan {
+  background: var(--pv-brand-cyan-soft);
+  border-color: var(--pv-brand-cyan-border);
+  color: #7CE5F4;
+}
+
+.pv-badge--success {
+  background: var(--pv-color-success-soft);
+  border-color: var(--pv-color-success-border);
+  color: var(--pv-color-success-text);
+}
+
+.pv-badge--warning {
+  background: var(--pv-color-warning-soft);
+  border-color: var(--pv-color-warning-border);
+  color: var(--pv-color-warning-text);
+}
+
+.pv-badge--error {
+  background: var(--pv-color-error-soft);
+  border-color: var(--pv-color-error-border);
+  color: var(--pv-color-error-text);
+}
+
+.pv-badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   6. Avatars, Code Box & Roster Rows
+   -------------------------------------------------------------------------- */
+
+.pv-avatar {
+  display: grid;
+  place-items: center;
+  border-radius: var(--pv-radius-md);
+  background: var(--pv-surface-elevated);
+  border: 1px solid var(--pv-border-default);
+  flex-shrink: 0;
+}
+
+.pv-avatar--sm { width: 36px; height: 36px; font-size: 1.1rem; }
+.pv-avatar--md { width: 48px; height: 48px; font-size: 1.45rem; }
+.pv-avatar--lg { width: 64px; height: 64px; font-size: 1.9rem; }
+
+.pv-avatar--host {
+  border-color: var(--pv-brand-violet);
+  box-shadow: var(--pv-glow-violet);
+}
+
+.pv-code-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pv-space-12);
+  padding: var(--pv-space-12) var(--pv-space-16);
+  border-radius: var(--pv-radius-md);
+  background: var(--pv-surface-input);
+  border: 1px solid var(--pv-border-default);
+}
+
+.pv-code-value {
+  font-family: var(--pv-font-mono);
+  font-size: var(--pv-text-lg);
+  font-weight: var(--pv-weight-bold);
+  letter-spacing: var(--pv-tracking-code);
+  color: var(--pv-brand-cyan);
+}
+
+.pv-roster {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pv-space-8);
+}
+
+.pv-roster-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pv-space-12);
+  padding: var(--pv-space-12);
+  border-radius: var(--pv-radius-md);
+  background: var(--pv-surface-card);
+  border: 1px solid var(--pv-border-subtle);
+}
+
+.pv-roster-row--me {
+  border-color: var(--pv-brand-cyan-border);
+  background: var(--pv-surface-elevated);
+}
+
+/* --------------------------------------------------------------------------
+   7. Modals, Toasts, Alerts & Adaptive Sidebar
+   -------------------------------------------------------------------------- */
+
+.pv-alert {
+  padding: var(--pv-space-12) var(--pv-space-16);
+  border-radius: var(--pv-radius-sm);
+  border: 1px solid var(--pv-border-subtle);
+  background: var(--pv-surface-input);
+  color: var(--pv-text-secondary);
+  font-size: var(--pv-text-sm);
+}
+
+.pv-alert--ok {
+  background: var(--pv-color-success-soft);
+  border-color: var(--pv-color-success-border);
+  color: var(--pv-color-success-text);
+}
+
+.pv-alert--warn {
+  background: var(--pv-color-warning-soft);
+  border-color: var(--pv-color-warning-border);
+  color: var(--pv-color-warning-text);
+}
+
+.pv-alert--error {
+  background: var(--pv-color-error-soft);
+  border-color: var(--pv-color-error-border);
+  color: var(--pv-color-error-text);
+}
+
+.pv-sidebar {
+  background: var(--pv-bg-secondary);
+  border-right: 1px solid var(--pv-border-subtle);
+}
+
+/* --------------------------------------------------------------------------
+   8. Shared Game HUD, Spinners, Skeletons & Empty States
+   -------------------------------------------------------------------------- */
+
+.pv-hud-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pv-space-12);
+  padding: var(--pv-space-12) var(--pv-space-16);
+  border-radius: var(--pv-radius-md);
+  background: var(--pv-surface-card);
+  border: 1px solid var(--pv-border-default);
+  font-variant-numeric: tabular-nums;
+}
+
+.pv-timer-track {
+  width: 100%;
+  height: 8px;
+  border-radius: var(--pv-radius-pill);
+  background: var(--pv-surface-input);
+  overflow: hidden;
+}
+
+.pv-timer-fill {
+  height: 100%;
+  border-radius: var(--pv-radius-pill);
+  background: var(--pv-gradient-brand);
+  transform-origin: left center;
+  transition: transform var(--pv-duration-fast) linear;
+}
+
+.pv-spinner {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 3px solid rgba(66, 214, 232, 0.22);
+  border-top-color: var(--pv-brand-cyan);
+  border-right-color: var(--pv-brand-violet);
+  animation: pvSpin 750ms linear infinite;
+}
+
+.pv-spinner--sm {
+  width: 22px;
+  height: 22px;
+  border-width: 2.5px;
+}
+
+.pv-spinner--lg {
+  width: 40px;
+  height: 40px;
+  border-width: 3.5px;
+}
+
+.pv-skeleton {
+  border-radius: var(--pv-radius-sm);
+  background: var(--pv-surface-elevated);
+  opacity: 0.65;
+  animation: pvPulse 1.4s ease-in-out infinite;
+}
+
+.pv-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--pv-space-8);
+  padding: var(--pv-space-24) var(--pv-space-16);
+}
+
+@keyframes pvSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pvPulse {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.8; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pv-spinner,
+  .pv-skeleton {
+    animation: none;
+  }
+  .pv-btn,
+  .pv-timer-fill {
+    transition: none;
+  }
+}
