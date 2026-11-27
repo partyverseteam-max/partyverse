@@ -1,0 +1,204 @@
+/* ==========================================================================
+   PartyVerse — Stage D1.2: Design Tokens & Core Surfaces
+   Brand Identity: Dark Gaming Universe | Purple + Teal + Cyan
+   Zero external fonts or dependencies. Mobile-first & accessible.
+   ========================================================================== */
+
+:root {
+  /* ------------------------------------------------------------------------
+     1. Core Backgrounds & Surface Layers
+     ------------------------------------------------------------------------ */
+  --pv-bg-base: #0B0D19;
+  --pv-bg-secondary: #111629;
+  --pv-surface-card: #171D32;
+  --pv-surface-elevated: #202842;
+  --pv-surface-input: #0E1222;
+  --pv-surface-overlay: rgba(11, 13, 25, 0.78);
+  --pv-surface-glass: rgba(17, 22, 41, 0.86);
+
+  /* ------------------------------------------------------------------------
+     2. Brand Accents (Official Purple, Teal & Cyan Palette)
+     ------------------------------------------------------------------------ */
+  --pv-brand-violet: #8757F7;
+  --pv-brand-violet-hover: #9970FA;
+  --pv-brand-violet-soft: rgba(135, 87, 247, 0.16);
+  --pv-brand-violet-border: rgba(135, 87, 247, 0.42);
+
+  --pv-brand-teal: #24C6B7;
+  --pv-brand-teal-hover: #38D4C6;
+  --pv-brand-teal-soft: rgba(36, 198, 183, 0.15);
+  --pv-brand-teal-border: rgba(36, 198, 183, 0.40);
+
+  --pv-brand-cyan: #42D6E8;
+  --pv-brand-cyan-hover: #62E0EF;
+  --pv-brand-cyan-soft: rgba(66, 214, 232, 0.15);
+  --pv-brand-cyan-border: rgba(66, 214, 232, 0.40);
+
+  /* ------------------------------------------------------------------------
+     3. Text Hierarchy (High-Contrast Dark Theme)
+     ------------------------------------------------------------------------ */
+  --pv-text-primary: #F3F6FC;
+  --pv-text-secondary: #A6B2CC;
+  --pv-text-muted: #7683A1;
+  --pv-text-on-accent: #FFFFFF;
+  --pv-text-on-cyan: #0B0D19;
+
+  /* ------------------------------------------------------------------------
+     4. Borders & Separators
+     ------------------------------------------------------------------------ */
+  --pv-border-default: #303A55;
+  --pv-border-subtle: rgba(48, 58, 85, 0.65);
+  --pv-border-strong: #435074;
+  --pv-divider: rgba(48, 58, 85, 0.55);
+
+  /* ------------------------------------------------------------------------
+     5. Semantic Status Colors
+     ------------------------------------------------------------------------ */
+  --pv-color-success: #39D99A;
+  --pv-color-success-soft: rgba(57, 217, 154, 0.14);
+  --pv-color-success-border: rgba(57, 217, 154, 0.38);
+  --pv-color-success-text: #86F0C5;
+
+  --pv-color-warning: #FFBE62;
+  --pv-color-warning-soft: rgba(255, 190, 98, 0.14);
+  --pv-color-warning-border: rgba(255, 190, 98, 0.38);
+  --pv-color-warning-text: #FFD99E;
+
+  --pv-color-error: #FF637C;
+  --pv-color-error-soft: rgba(255, 99, 124, 0.14);
+  --pv-color-error-border: rgba(255, 99, 124, 0.40);
+  --pv-color-error-text: #FFA6B5;
+
+  /* ------------------------------------------------------------------------
+     6. Brand & Ambient Gradients (Purple -> Teal -> Cyan)
+     ------------------------------------------------------------------------ */
+  --pv-gradient-brand: linear-gradient(135deg, #8757F7 0%, #24C6B7 55%, #42D6E8 100%);
+  --pv-gradient-brand-hover: linear-gradient(135deg, #9970FA 0%, #34D4C5 55%, #62E0EF 100%);
+  --pv-gradient-violet-teal: linear-gradient(135deg, #8757F7 0%, #24C6B7 100%);
+  --pv-gradient-teal-cyan: linear-gradient(135deg, #24C6B7 0%, #42D6E8 100%);
+  --pv-gradient-surface: linear-gradient(180deg, #1B223A 0%, #171D32 100%);
+  --pv-gradient-surface-elevated: linear-gradient(180deg, #242D4A 0%, #1B223A 100%);
+  --pv-gradient-ambient-bg:
+    radial-gradient(circle at 12% 0%, rgba(135, 87, 247, 0.16), transparent 42%),
+    radial-gradient(circle at 88% 8%, rgba(36, 198, 183, 0.12), transparent 40%),
+    radial-gradient(circle at 50% 100%, rgba(66, 214, 232, 0.08), transparent 45%);
+
+  /* ------------------------------------------------------------------------
+     7. Typography (System Font Stacks — Zero External Dependencies)
+     ------------------------------------------------------------------------ */
+  --pv-font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --pv-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", monospace;
+
+  --pv-weight-regular: 400;
+  --pv-weight-medium: 500;
+  --pv-weight-semibold: 600;
+  --pv-weight-bold: 700;
+  --pv-weight-extrabold: 800;
+
+  /* Responsive Type Scale (rem-based, preserves browser zoom) */
+  --pv-text-xs: 0.75rem;                         /* 12px */
+  --pv-text-sm: 0.875rem;                        /* 14px */
+  --pv-text-base: 1rem;                          /* 16px */
+  --pv-text-lg: clamp(1.0625rem, 1rem + 0.35vw, 1.1875rem);
+  --pv-text-xl: clamp(1.25rem, 1.12rem + 0.65vw, 1.5rem);
+  --pv-text-2xl: clamp(1.5rem, 1.28rem + 1.05vw, 1.875rem);
+  --pv-text-3xl: clamp(1.75rem, 1.45rem + 1.45vw, 2.25rem);
+
+  --pv-leading-tight: 1.2;
+  --pv-leading-snug: 1.35;
+  --pv-leading-normal: 1.5;
+  --pv-leading-relaxed: 1.65;
+
+  --pv-tracking-tight: -0.02em;
+  --pv-tracking-normal: 0em;
+  --pv-tracking-wide: 0.06em;
+  --pv-tracking-code: 0.14em;
+
+  /* ------------------------------------------------------------------------
+     8. Spacing Scale (4, 8, 12, 16, 24, 32, 48px)
+     ------------------------------------------------------------------------ */
+  --pv-space-4: 0.25rem;   /* 4px */
+  --pv-space-8: 0.5rem;    /* 8px */
+  --pv-space-12: 0.75rem;  /* 12px */
+  --pv-space-16: 1rem;     /* 16px */
+  --pv-space-24: 1.5rem;   /* 24px */
+  --pv-space-32: 2rem;     /* 32px */
+  --pv-space-48: 3rem;     /* 48px */
+
+  /* ------------------------------------------------------------------------
+     9. Border Radius Scale
+     ------------------------------------------------------------------------ */
+  --pv-radius-xs: 6px;
+  --pv-radius-sm: 10px;
+  --pv-radius-md: 14px;
+  --pv-radius-lg: 18px;
+  --pv-radius-xl: 24px;
+  --pv-radius-pill: 9999px;
+
+  /* ------------------------------------------------------------------------
+     10. Shadows, Elevation & Restrained Glows
+     ------------------------------------------------------------------------ */
+  --pv-shadow-sm: 0 2px 8px rgba(5, 7, 15, 0.28);
+  --pv-shadow-md: 0 8px 24px rgba(5, 7, 15, 0.34);
+  --pv-shadow-lg: 0 16px 38px rgba(5, 7, 15, 0.44);
+  --pv-glow-violet: 0 0 0 1px rgba(135, 87, 247, 0.28), 0 8px 24px rgba(135, 87, 247, 0.16);
+  --pv-glow-teal: 0 0 0 1px rgba(36, 198, 183, 0.28), 0 8px 24px rgba(36, 198, 183, 0.14);
+  --pv-glow-cyan: 0 0 0 1px rgba(66, 214, 232, 0.28), 0 8px 24px rgba(66, 214, 232, 0.14);
+
+  /* ------------------------------------------------------------------------
+     11. Focus Rings & Accessible Interaction States
+     ------------------------------------------------------------------------ */
+  --pv-focus-color: #42D6E8;
+  --pv-focus-ring: 0 0 0 3px rgba(66, 214, 232, 0.34);
+  --pv-focus-outline: 2px solid #42D6E8;
+  --pv-focus-offset: 2px;
+  --pv-state-hover-tint: rgba(243, 246, 252, 0.06);
+  --pv-state-active-tint: rgba(243, 246, 252, 0.10);
+  --pv-state-disabled-opacity: 0.48;
+
+  /* ------------------------------------------------------------------------
+     12. Motion (Standard Durations & Restrained Easing)
+     ------------------------------------------------------------------------ */
+  --pv-duration-fast: 150ms;
+  --pv-duration-base: 220ms;
+  --pv-duration-slow: 320ms;
+  --pv-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --pv-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ------------------------------------------------------------------------
+     13. Responsive Layout Dimensions & Touch Targets
+     ------------------------------------------------------------------------ */
+  --pv-topbar-height: 64px;
+  --pv-bottomnav-height: 68px;
+  --pv-sidebar-width: 240px;
+  --pv-container-sm: 640px;
+  --pv-container-md: 860px;
+  --pv-container-lg: 1120px;
+  --pv-touch-min: 44px;
+  --pv-touch-comfortable: 48px;
+  --pv-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --pv-safe-top: env(safe-area-inset-top, 0px);
+
+  /* ------------------------------------------------------------------------
+     14. Layering & Z-Index Scale
+     ------------------------------------------------------------------------ */
+  --pv-z-base: 0;
+  --pv-z-raised: 10;
+  --pv-z-sticky: 20;
+  --pv-z-nav: 30;
+  --pv-z-overlay: 40;
+  --pv-z-modal: 50;
+  --pv-z-toast: 60;
+  --pv-z-tooltip: 70;
+}
+
+/* Respect user reduced-motion preference at the token layer */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --pv-duration-fast: 0.01ms;
+    --pv-duration-base: 0.01ms;
+    --pv-duration-slow: 0.01ms;
+  }
+}
