@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="PartyVerse Portal Symbol">
+  <defs>
+    <linearGradient id="pv-outer-grad" gradientUnits="userSpaceOnUse" x1="64" y1="64" x2="448" y2="448">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="52%" stop-color="#14B8A6"/>
+      <stop offset="100%" stop-color="#22D3EE"/>
+    </linearGradient>
+    <linearGradient id="pv-inner-grad" gradientUnits="userSpaceOnUse" x1="384" y1="156" x2="128" y2="356">
+      <stop offset="0%" stop-color="#22D3EE"/>
+      <stop offset="50%" stop-color="#14B8A6"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+    <linearGradient id="pv-core-grad" gradientUnits="userSpaceOnUse" x1="196" y1="196" x2="316" y2="316">
+      <stop offset="0%" stop-color="#E0F2FE"/>
+      <stop offset="45%" stop-color="#22D3EE"/>
+      <stop offset="100%" stop-color="#8B5CF6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Outer Split Portal Gate (Top-Left Arc) -->
+  <path
+    d="M 118.00 336.00 L 84.18 277.19 A 42.00 42.00 0 0 1 84.40 234.94 L 155.82 113.69 A 42.00 42.00 0 0 1 192.01 93.00 L 310.00 93.00"
+    fill="none"
+    stroke="url(#pv-outer-grad)"
+    stroke-width="38"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Outer Split Portal Gate (Bottom-Right Arc) -->
+  <path
+    d="M 394.00 176.00 L 427.82 234.81 A 42.00 42.00 0 0 1 427.60 277.06 L 356.18 398.31 A 42.00 42.00 0 0 1 319.99 419.00 L 202.00 419.00"
+    fill="none"
+    stroke="url(#pv-outer-grad)"
+    stroke-width="38"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Multiplayer Connection Nodes -->
+  <circle cx="368" cy="122" r="20" fill="#22D3EE"/>
+  <circle cx="144" cy="390" r="20" fill="#8B5CF6"/>
+
+  <!-- Inner Dimensional Aperture -->
+  <path
+    d="M 186.94 175.20 A 24.00 24.00 0 0 1 207.24 164.00 L 304.76 164.00 A 24.00 24.00 0 0 1 325.06 175.20 L 367.93 243.20 A 24.00 24.00 0 0 1 367.93 268.80 L 325.06 336.80 A 24.00 24.00 0 0 1 304.76 348.00 L 207.24 348.00 A 24.00 24.00 0 0 1 186.94 336.80 L 144.07 268.80 A 24.00 24.00 0 0 1 144.07 243.20 Z"
+    fill="none"
+    stroke="url(#pv-inner-grad)"
+    stroke-width="20"
+    stroke-linejoin="round"
+    opacity="0.92"
+  />
+
+  <!-- Central Portal Spark -->
+  <path
+    d="M 256 196 Q 264 248 316 256 Q 264 264 256 316 Q 248 264 196 256 Q 248 248 256 196 Z"
+    fill="url(#pv-core-grad)"
+  />
+</svg>
