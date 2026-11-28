@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PartyVerse — Play Together. Win Together.</title>
+  <link rel="icon" type="image/svg+xml" href="./assets/icons/favicon.svg" />
+  <link rel="stylesheet" href="./css/style.css" />
+  <script
+    src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+    async
+    defer
+  ></script>
+</head>
+<body>
+  <!-- Splash Overlay (Hidden automatically once boot() completes) -->
+  <div id="app-splash" class="app-splash" role="status" aria-live="polite" aria-label="Loading PartyVerse">
+    <div class="app-splash-inner">
+      <div class="app-splash-orbit" aria-hidden="true">
+        <img
+          src="./assets/logo/portal-symbol.svg"
+          alt=""
+          class="app-splash-symbol"
+          width="72"
+          height="72"
+        />
+      </div>
+      <img
+        src="./assets/logo/partyverse-wordmark.svg"
+        alt="PartyVerse"
+        class="app-splash-wordmark"
+        width="220"
+        height="52"
+      />
+      <p class="app-splash-tagline">Play Together. Win Together.</p>
+      <div class="app-splash-loader" aria-hidden="true">
+        <span class="pv-spinner pv-spinner--sm"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Desktop Fixed Left Sidebar (>= 1024px) -->
+  <aside class="pv-sidebar app-sidebar" aria-label="Primary desktop navigation">
+    <div class="app-sidebar-brand">
+      <img
+        src="./assets/logo/partyverse-wordmark.svg"
+        alt="PartyVerse"
+        class="app-sidebar-wordmark"
+        width="176"
+        height="42"
+      />
+      <p class="app-sidebar-tagline">Play Together. Win Together.</p>
+    </div>
+
+    <nav class="app-sidebar-nav" aria-label="Main sections">
+      <button type="button" class="sidebar-nav-btn is-active" data-view="lobby" aria-current="page">
+        <span class="nav-icon" aria-hidden="true">🏠</span>
+        <span class="sidebar-nav-label">Lobby</span>
+      </button>
+      <button type="button" class="sidebar-nav-btn" data-view="games">
+        <span class="nav-icon" aria-hidden="true">🎮</span>
+        <span class="sidebar-nav-label">Games</span>
+      </button>
+      <button type="button" class="sidebar-nav-btn" data-view="profile">
+        <span class="nav-icon" aria-hidden="true">👤</span>
+        <span class="sidebar-nav-label">Profile</span>
+      </button>
+    </nav>
+
+    <div class="app-sidebar-footer">
+      <button type="button" class="sidebar-nav-btn sidebar-nav-btn--utility" data-view="settings">
+        <span class="nav-icon" aria-hidden="true">⚙️</span>
+        <span class="sidebar-nav-label">Settings</span>
+      </button>
+      <span class="app-sidebar-meta">Private Friends Hub</span>
+    </div>
+  </aside>
+
+  <div class="app-shell">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <img
+            src="./assets/logo/portal-symbol.svg"
+            alt="PartyVerse"
+            class="brand-logo"
+            width="34"
+            height="34"
+          />
+          <span class="brand-name">PartyVerse</span>
+        </div>
+
+        <div class="topbar-controls">
+          <button
+            id="btn-sound-toggle"
+            type="button"
+            class="sound-toggle-btn"
+            aria-pressed="false"
+            aria-label="Sound effects off. Tap to enable."
+            title="Toggle sound effects"
+          >
+            <span id="sound-toggle-icon" aria-hidden="true">🔇</span>
+            <span id="sound-toggle-label" class="sound-toggle-label">SFX Off</span>
+          </button>
+
+          <div id="status-pill" class="status-pill" role="status" aria-live="polite">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span id="status-auth">Checking session...</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="app-main">
+      <!-- Guest Sign-In & Turnstile Prompt -->
+      <section id="auth-card" class="auth-card" aria-labelledby="auth-heading">
+        <div class="auth-card-head">
+          <div>
+            <h2 id="auth-heading" class="auth-title">Start Guest Session</h2>
+            <p class="auth-subtitle">
+              No sign-up or password needed. Complete the quick verification below to continue as a guest.
+            </p>
+          </div>
+          <span class="pill pill--purple">Guest Access</span>
+        </div>
+
+        <div class="turnstile-wrap">
+          <div id="turnstile-box"></div>
+          <div class="turnstile-status">
+            Verification: <span id="status-turnstile">Waiting...</span>
+          </div>
+        </div>
+
+        <button id="btn-signin" type="button" class="btn btn--primary btn--full" disabled>
+          Continue as Guest
+        </button>
+
+        <div id="log-output" class="auth-feedback" role="status" aria-live="polite">
+          Checking guest session...
+        </div>
+      </section>
+
+      <!-- View 1: Lobby (Party Command Center) -->
+      <section id="view-lobby" class="view is-active" aria-labelledby="lobby-heading">
+        <!-- Player Identity Strip -->
+        <div id="lobby-player-bar" class="lobby-player-bar">
+          <div class="lobby-player-left">
+            <div id="lobby-player-avatar" class="lobby-player-avatar" aria-hidden="true">🦊</div>
+            <div class="lobby-player-meta">
+              <span class="lobby-player-kicker">Ready to Play</span>
+              <span id="lobby-player-name" class="lobby-player-name">Guest Player</span>
+            </div>
+          </div>
+          <button
+            id="btn-lobby-edit-profile"
+            type="button"
+            class="btn btn--secondary btn--sm"
+            data-jump-view="profile"
+          >
+            Profile
+          </button>
+        </div>
+
+        <!-- Cosmic Hero Banner -->
+        <div class="welcome-banner lobby-hero">
+          <div class="lobby-hero-orb" aria-hidden="true"></div>
+          <span class="welcome-kicker">Private Friends Lounge</span>
+          <h1 id="lobby-heading" class="welcome-title">Play Together. Win Together.</h1>
+          <p class="welcome-copy">
+            Gather 2–10 friends in a private room for quick mini-games — zero accounts, zero setup.
+          </p>
+        </div>
+
+        <!-- Prominent Create Room Card -->
+        <article class="action-card action-card--featured" aria-labelledby="create-room-heading">
+          <div class="action-card-top">
+            <div class="action-icon action-icon--purple" aria-hidden="true">🏠</div>
+            <div>
+              <div class="action-title-row">
+                <h2 id="create-room-heading" class="action-title">Create Private Room</h2>
+                <span class="pill pill--teal">2–10 Friends</span>
+              </div>
+              <p class="action-desc">
+                Host a private lobby, pick Quiz Battle or Tic-Tac-Toe Tournament, and share a 6-character code.
+              </p>
+            </div>
+          </div>
+          <button type="button" class="btn btn--primary btn--full" disabled aria-disabled="true">
+            Create Room — Coming in Phase 2B
+          </button>
+        </article>
+
+        <!-- Join Room Tile -->
+        <article class="action-card action-card--join" aria-labelledby="join-room-heading">
+          <div class="action-card-top">
+            <div class="action-icon action-icon--cyan" aria-hidden="true">🎟️</div>
+            <div>
+              <h2 id="join-room-heading" class="action-title">Join with Room Code</h2>
+              <p class="action-desc">
+                Got an invite code from a friend? Jump straight into their waiting room.
+              </p>
+            </div>
+          </div>
+          <button type="button" class="btn btn--secondary btn--full" disabled aria-disabled="true">
+            Join Room with Code — Coming in Phase 2B
+          </button>
+        </article>
+
+        <!-- Recently Played (Clean Empty State) -->
+        <section aria-labelledby="recent-heading">
+          <div class="section-head lobby-section-head">
+            <h2 id="recent-heading" class="action-title">Recently Played</h2>
+            <button type="button" class="link-btn" data-jump-view="games">Explore Games →</button>
+          </div>
+          <div class="card card--dashed empty-state">
+            <div class="empty-state-icon" aria-hidden="true">🎲</div>
+            <h3 class="empty-state-title">No games played yet</h3>
+            <p class="empty-state-desc">
+              Your recent party rooms and mini-game sessions will show up here once live rooms launch.
+            </p>
+          </div>
+        </section>
+      </section>
+
+      <!-- View 2: Games (3D-Inspired Showcase Library) -->
+      <section id="view-games" class="view" aria-labelledby="games-heading">
+        <div class="section-head games-hero-head">
+          <span class="welcome-kicker">Game Universe</span>
+          <h1 id="games-heading" class="section-title">Mini-Games</h1>
+          <p class="section-subtitle">
+            Built for 2–10 friends on mobile or desktop. Tap any game to preview rules and modes.
+          </p>
+        </div>
+
+        <div class="games-grid">
+          <!-- Game 1: Quiz Battle -->
+          <article class="game-card game-card--available game-card--showcase" aria-labelledby="game-quiz-title">
+            <div class="game-art-wrap">
+              <svg viewBox="0 0 400 160" width="100%" role="img" aria-label="Quiz Battle 3D-inspired artwork" class="game-art-svg">
+                <defs>
+                  <linearGradient id="art-quiz-bg" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#24135F" />
+                    <stop offset="52%" stop-color="#17244E" />
+                    <stop offset="100%" stop-color="#0E3947" />
+                  </linearGradient>
+                  <radialGradient id="art-quiz-glow" cx="74%" cy="46%" r="48%">
+                    <stop offset="0%" stop-color="#42D6E8" stop-opacity="0.48" />
+                    <stop offset="55%" stop-color="#8757F7" stop-opacity="0.24" />
+                    <stop offset="100%" stop-color="#0B0D19" stop-opacity="0" />
+                  </radialGradient>
+                  <linearGradient id="art-quiz-bolt" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#E0F2FE" />
+                    <stop offset="45%" stop-color="#42D6E8" />
+                    <stop offset="100%" stop-color="#8757F7" />
+                  </linearGradient>
+                  <linearGradient id="art-quiz-bar" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#8757F7" />
+                    <stop offset="55%" stop-color="#24C6B7" />
+                    <stop offset="100%" stop-color="#42D6E8" />
+                  </linearGradient>
+                </defs>
+                <rect width="400" height="160" fill="url(#art-quiz-bg)" />
+                <rect width="400" height="160" fill="url(#art-quiz-glow)" />
+                <!-- 3D Floating Quiz Option Cards -->
+                <rect x="24" y="24" width="166" height="32" rx="10" fill="#111629" fill-opacity="0.82" stroke="#8757F7" stroke-opacity="0.55" stroke-width="1.5" />
+                <circle cx="42" cy="40" r="8" fill="#8757F7" />
+                <rect x="58" y="36" width="96" height="8" rx="4" fill="#F3F6FC" fill-opacity="0.82" />
+
+                <rect x="24" y="64" width="166" height="32" rx="10" fill="#171D32" fill-opacity="0.92" stroke="#24C6B7" stroke-width="2" />
+                <circle cx="42" cy="80" r="8" fill="#39D99A" />
+                <rect x="58" y="76" width="112" height="8" rx="4" fill="#86F0C5" />
+
+                <rect x="24" y="104" width="166" height="32" rx="10" fill="#111629" fill-opacity="0.72" stroke="#303A55" stroke-width="1.5" />
+                <circle cx="42" cy="120" r="8" fill="#42D6E8" fill-opacity="0.7" />
+                <rect x="58" y="116" width="76" height="8" rx="4" fill="#A6B2CC" fill-opacity="0.75" />
+
+                <!-- Timer Bar -->
+                <rect x="220" y="122" width="152" height="10" rx="5" fill="#0B0D19" fill-opacity="0.7" />
+                <rect x="220" y="122" width="116" height="10" rx="5" fill="url(#art-quiz-bar)" />
+
+                <!-- 3D Lightning Crest -->
+                <circle cx="296" cy="64" r="44" fill="#111629" fill-opacity="0.65" stroke="#42D6E8" stroke-opacity="0.45" stroke-width="2" />
+                <path d="M304 24 L270 72 H296 L284 108 L328 58 H300 Z" fill="url(#art-quiz-bolt)" />
+              </svg>
+              <span class="game-art-badge pill pill--purple">MVP Launch</span>
+            </div>
+
+            <div class="game-card-top">
+              <div>
+                <h2 id="game-quiz-title" class="game-title">Quiz Battle</h2>
+                <p class="game-mode">Real-time trivia arena</p>
+              </div>
+            </div>
+
+            <p class="game-desc">
+              Answer fast, outscore your friends, and climb the round-by-round trivia podium together.
+            </p>
+
+            <div class="game-tags">
+              <span class="pill pill--cyan">2–10 Players</span>
+              <span class="pill pill--teal">Speed Scoring</span>
+            </div>
+
+            <div class="game-footer">
+              <span>Unlocks in Phase 2B</span>
+              <button
+                type="button"
+                class="btn btn--secondary btn--sm"
+                data-game-detail="quiz_battle"
+              >
+                Game Info
+              </button>
+            </div>
+          </article>
+
+          <!-- Game 2: Tic-Tac-Toe Tournament -->
+          <article class="game-card game-card--available game-card--showcase" aria-labelledby="game-ttt-title">
+            <div class="game-art-wrap">
+              <svg viewBox="0 0 400 160" width="100%" role="img" aria-label="Tic-Tac-Toe Tournament 3D-inspired artwork" class="game-art-svg">
+                <defs>
+                  <linearGradient id="art-ttt-bg" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#111D42" />
+                    <stop offset="50%" stop-color="#1C194A" />
+                    <stop offset="100%" stop-color="#112E3E" />
+                  </linearGradient>
+                  <radialGradient id="art-ttt-glow" cx="50%" cy="50%" r="52%">
+                    <stop offset="0%" stop-color="#8757F7" stop-opacity="0.34" />
+                    <stop offset="60%" stop-color="#24C6B7" stop-opacity="0.16" />
+                    <stop offset="100%" stop-color="#0B0D19" stop-opacity="0" />
+                  </radialGradient>
+                  <linearGradient id="art-ttt-x" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#C4B5FD" />
+                    <stop offset="100%" stop-color="#8757F7" />
+                  </linearGradient>
+                  <linearGradient id="art-ttt-o" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#E0F2FE" />
+                    <stop offset="100%" stop-color="#42D6E8" />
+                  </linearGradient>
+                </defs>
+                <rect width="400" height="160" fill="url(#art-ttt-bg)" />
+                <rect width="400" height="160" fill="url(#art-ttt-glow)" />
+
+                <!-- Bracket lines left & right -->
+                <path d="M26 42 H62 V118 H26 M62 80 H94" fill="none" stroke="#8757F7" stroke-opacity="0.55" stroke-width="2.5" stroke-linecap="round" />
+                <path d="M374 42 H338 V118 H374 M338 80 H306" fill="none" stroke="#42D6E8" stroke-opacity="0.55" stroke-width="2.5" stroke-linecap="round" />
+
+                <!-- Glowing 3D Glass Board -->
+                <rect x="116" y="18" width="168" height="124" rx="16" fill="#0B0D19" fill-opacity="0.72" stroke="#303A55" stroke-width="2" />
+                <g stroke="#42D6E8" stroke-opacity="0.38" stroke-width="2.5">
+                  <line x1="172" y1="30" x2="172" y2="130" />
+                  <line x1="228" y1="30" x2="228" y2="130" />
+                  <line x1="128" y1="60" x2="272" y2="60" />
+                  <line x1="128" y1="100" x2="272" y2="100" />
+                </g>
+
+                <!-- Diagonal Winning X Line -->
+                <line x1="138" y1="34" x2="262" y2="124" stroke="#8757F7" stroke-opacity="0.45" stroke-width="8" stroke-linecap="round" />
+                <g stroke="url(#art-ttt-x)" stroke-width="5.5" stroke-linecap="round">
+                  <line x1="136" y1="32" x2="154" y2="50" />
+                  <line x1="154" y1="32" x2="136" y2="50" />
+                  <line x1="191" y1="71" x2="209" y2="89" />
+                  <line x1="209" y1="71" x2="191" y2="89" />
+                  <line x1="246" y1="110" x2="264" y2="128" />
+                  <line x1="264" y1="110" x2="246" y2="128" />
+                </g>
+
+                <!-- Glowing O Pieces -->
+                <circle cx="255" cy="41" r="11" fill="none" stroke="url(#art-ttt-o)" stroke-width="5" />
+                <circle cx="145" cy="118" r="11" fill="none" stroke="url(#art-ttt-o)" stroke-width="5" />
+              </svg>
+              <span class="game-art-badge pill pill--purple">MVP Launch</span>
+            </div>
+
+            <div class="game-card-top">
+              <div>
+                <h2 id="game-ttt-title" class="game-title">Tic-Tac-Toe Tournament</h2>
+                <p class="game-mode">1v1 Knockout Bracket</p>
+              </div>
+            </div>
+
+            <p class="game-desc">
+              Face off in rapid 1v1 duels across a live knockout bracket while friends spectate until one claims the crown.
+            </p>
+
+            <div class="game-tags">
+              <span class="pill pill--cyan">2–10 Players</span>
+              <span class="pill pill--teal">Live Spectators</span>
+            </div>
+
+            <div class="game-footer">
+              <span>Unlocks in Phase 2B</span>
+              <button
+                type="button"
+                class="btn btn--secondary btn--sm"
+                data-game-detail="ttt_tournament"
+              >
+                Game Info
+              </button>
+            </div>
+          </article>
+
+          <!-- Game 3: Impostor Word (Coming Soon) -->
+          <article class="game-card game-card--upcoming game-card--showcase" aria-labelledby="game-impostor-title">
+            <div class="game-art-wrap">
+              <svg viewBox="0 0 400 160" width="100%" role="img" aria-label="Impostor Word preview artwork" class="game-art-svg">
+                <defs>
+                  <linearGradient id="art-imp-bg" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#111629" />
+                    <stop offset="100%" stop-color="#1B223A" />
+                  </linearGradient>
+                </defs>
+                <rect width="400" height="160" fill="url(#art-imp-bg)" />
+                <circle cx="200" cy="80" r="54" fill="#8757F7" opacity="0.12" />
+                <rect x="112" y="54" width="176" height="52" rx="14" fill="#0B0D19" stroke="#303A55" stroke-dasharray="6 5" stroke-width="2" />
+                <circle cx="144" cy="80" r="7" fill="#7683A1" />
+                <circle cx="181" cy="80" r="7" fill="#7683A1" />
+                <circle cx="219" cy="80" r="7" fill="#7683A1" />
+                <circle cx="256" cy="80" r="7" fill="#8757F7" opacity="0.7" />
+              </svg>
+              <span class="game-art-badge pill pill--upcoming">Coming Soon</span>
+            </div>
+
+            <div class="game-card-top">
+              <div>
+                <h2 id="game-impostor-title" class="game-title">Impostor Word</h2>
+                <p class="game-mode">Social deduction</p>
+              </div>
+            </div>
+
+            <p class="game-desc">
+              Everyone shares one secret word except the impostors. Drop subtle clues and vote out the bluffers.
+            </p>
+
+            <div class="game-tags">
+              <span class="pill pill--muted">2–10 Players</span>
+              <span class="pill pill--muted">Post-MVP Expansion</span>
+            </div>
+
+            <div class="game-footer">
+              <span>Planned expansion</span>
+              <button
+                type="button"
+                class="btn btn--secondary btn--sm"
+                data-game-detail="impostor_word"
+              >
+                Preview
+              </button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- View 3: Profile -->
+      <section id="view-profile" class="view" aria-labelledby="profile-heading">
+        <div class="section-head">
+          <span class="welcome-kicker">Player Identity</span>
+          <h1 id="profile-heading" class="section-title">Profile</h1>
+          <p class="section-subtitle">
+            Your guest nickname, avatar, and Recovery PIN are tied to your PartyVerse profile.
+          </p>
+        </div>
+
+        <div class="profile-stack">
+          <!-- Avatar, Nickname & Player Code -->
+          <article class="card profile-hero-card">
+            <div class="profile-preview">
+              <div class="profile-avatar-ring">
+                <div id="profile-avatar-preview" class="profile-avatar-lg" aria-hidden="true">🦊</div>
+              </div>
+              <div class="profile-identity">
+                <h2 id="profile-display-name" class="profile-name">Guest Player</h2>
+                <p id="profile-sync-note" class="profile-note">Sign in as a guest to load your profile.</p>
+              </div>
+            </div>
+
+            <div class="code-row">
+              <div class="code-meta">
+                <span class="code-label">Player Code</span>
+                <span id="profile-player-code" class="code-value">------</span>
+              </div>
+              <button id="btn-copy-code" type="button" class="btn btn--secondary btn--sm" disabled>
+                Copy Code
+              </button>
+            </div>
+
+            <div class="field">
+              <label for="input-nickname" class="field-label">Nickname</label>
+              <input
+                id="input-nickname"
+                class="field-input"
+                type="text"
+                maxlength="20"
+                autocomplete="off"
+                placeholder="Enter a nickname (1–20 chars)"
+                disabled
+              />
+              <span class="field-hint">
+                1–20 characters. Saved to your PartyVerse guest profile.
+              </span>
+            </div>
+
+            <div class="field">
+              <span class="field-label">Preset Avatar</span>
+              <div id="avatar-grid" class="avatar-grid" role="group" aria-label="Choose a preset avatar">
+                <button type="button" class="avatar-option is-selected" data-avatar="🦊" aria-pressed="true" aria-label="Fox avatar">🦊</button>
+                <button type="button" class="avatar-option" data-avatar="🐼" aria-pressed="false" aria-label="Panda avatar">🐼</button>
+                <button type="button" class="avatar-option" data-avatar="🐙" aria-pressed="false" aria-label="Octopus avatar">🐙</button>
+                <button type="button" class="avatar-option" data-avatar="🦉" aria-pressed="false" aria-label="Owl avatar">🦉</button>
+                <button type="button" class="avatar-option" data-avatar="👾" aria-pressed="false" aria-label="Alien avatar">👾</button>
+                <button type="button" class="avatar-option" data-avatar="🤖" aria-pressed="false" aria-label="Robot avatar">🤖</button>
+                <button type="button" class="avatar-option" data-avatar="🐯" aria-pressed="false" aria-label="Tiger avatar">🐯</button>
+                <button type="button" class="avatar-option" data-avatar="🐸" aria-pressed="false" aria-label="Frog avatar">🐸</button>
+              </div>
+            </div>
+
+            <div class="profile-actions">
+              <button id="btn-save-profile" type="button" class="btn btn--primary btn--full" disabled>
+                Save Profile
+              </button>
+              <div id="profile-feedback" class="inline-feedback" role="status" aria-live="polite" hidden></div>
+            </div>
+          </article>
+
+          <!-- 8-Digit Recovery PIN -->
+          <article class="card pin-card" aria-labelledby="pin-heading">
+            <div class="pin-card-head">
+              <h2 id="pin-heading" class="pin-title">8-Digit Recovery PIN</h2>
+              <span id="pin-status-pill" class="pill pill--upcoming">Not Set</span>
+            </div>
+
+            <p id="pin-desc" class="pin-desc">
+              Generate a one-time 8-digit PIN to restore your profile on another device using your Player Code. PINs are hashed server-side and cannot be viewed again.
+            </p>
+
+            <!-- Masked Slots (shown when PIN is not currently being revealed) -->
+            <div id="pin-slots" class="pin-slots" aria-hidden="true">
+              <span class="pin-slot">–</span>
+              <span class="pin-slot">–</span>
+              <span class="pin-slot">–</span>
+              <span class="pin-slot">–</span>
+              <span class="pin-slot">–</span>
+              <span class="pin-slot">–</span>
+              <span class="pin-slot">–</span>
+              <span class="pin-slot">–</span>
+            </div>
+
+            <!-- One-Time Reveal Box (memory-only; cleared on dismiss or refresh) -->
+            <div id="pin-reveal" class="pin-reveal" hidden>
+              <p class="pin-reveal-warning">
+                Save both codes now. This PIN is shown only once and will disappear when dismissed or refreshed.
+              </p>
+              <div class="pin-reveal-grid">
+                <div class="pin-reveal-item">
+                  <span class="pin-reveal-label">Player Code</span>
+                  <span id="reveal-player-code" class="pin-reveal-code">------</span>
+                </div>
+                <div class="pin-reveal-item">
+                  <span class="pin-reveal-label">8-Digit PIN</span>
+                  <span id="reveal-pin-code" class="pin-reveal-code">--------</span>
+                </div>
+              </div>
+              <div class="pin-actions">
+                <button id="btn-copy-recovery" type="button" class="btn btn--primary btn--sm">
+                  Copy Code &amp; PIN
+                </button>
+                <button id="btn-dismiss-pin" type="button" class="btn btn--secondary btn--sm">
+                  I Saved It
+                </button>
+              </div>
+            </div>
+
+            <button id="btn-generate-pin" type="button" class="btn btn--secondary btn--full" disabled>
+              Generate Recovery PIN
+            </button>
+
+            <div id="pin-feedback" class="inline-feedback" role="status" aria-live="polite" hidden></div>
+          </article>
+
+          <!-- Recover Existing Profile -->
+          <details id="recover-details" class="card recover-details">
+            <summary class="recover-summary">
+              <span>Recover Existing Profile</span>
+              <span class="recover-chevron" aria-hidden="true">▼</span>
+            </summary>
+            <div class="recover-body">
+              <p class="pin-desc">
+                Enter your 6-character Player Code and 8-digit Recovery PIN to move your saved profile to this device. Your current guest profile must be unused (pristine), and the PIN will be invalidated after recovery.
+              </p>
+
+              <div class="recover-grid">
+                <div class="field">
+                  <label for="input-recover-code" class="field-label">Player Code</label>
+                  <input
+                    id="input-recover-code"
+                    class="field-input field-input--mono"
+                    type="text"
+                    maxlength="6"
+                    autocomplete="off"
+                    autocapitalize="characters"
+                    spellcheck="false"
+                    placeholder="e.g. 7K4M9Q"
+                  />
+                </div>
+
+                <div class="field">
+                  <label for="input-recover-pin" class="field-label">8-Digit PIN</label>
+                  <input
+                    id="input-recover-pin"
+                    class="field-input field-input--mono"
+                    type="password"
+                    inputmode="numeric"
+                    maxlength="8"
+                    autocomplete="off"
+                    placeholder="8 digits"
+                  />
+                </div>
+              </div>
+
+              <button id="btn-recover-profile" type="button" class="btn btn--primary btn--full" disabled>
+                Recover Profile
+              </button>
+
+              <div id="recover-feedback" class="inline-feedback" role="status" aria-live="polite" hidden></div>
+            </div>
+          </details>
+
+          <!-- Guest Session Information -->
+          <article class="card session-card" aria-labelledby="session-heading">
+            <h2 id="session-heading" class="pin-title">Guest Session</h2>
+            <div class="session-row">
+              <span class="session-label">Session Status</span>
+              <span id="profile-session-status" class="session-value">Checking session...</span>
+            </div>
+            <div class="session-row">
+              <span class="session-label">Account Type</span>
+              <span class="session-value">Anonymous Guest</span>
+            </div>
+            <button id="btn-signout" type="button" class="btn btn--danger btn--full" hidden>
+              Sign Out of Guest Session
+            </button>
+          </article>
+
+          <!-- App Settings Utility Link (Mobile) -->
+          <article class="card profile-utility-card" aria-labelledby="profile-settings-heading">
+            <div class="profile-utility-head">
+              <div class="profile-utility-copy">
+                <h2 id="profile-settings-heading" class="pin-title">App Settings</h2>
+                <p class="pin-desc">
+                  Manage sound effects, reduced animations, and Android installation steps.
+                </p>
+              </div>
+              <span class="profile-utility-icon" aria-hidden="true">⚙️</span>
+            </div>
+            <button
+              id="btn-open-settings"
+              type="button"
+              class="btn btn--secondary btn--full"
+              data-jump-view="settings"
+            >
+              Open Settings
+            </button>
+          </article>
+        </div>
+      </section>
+
+      <!-- View 4: Settings (Preferences, Motion, Install & About) -->
+      <section id="view-settings" class="view" aria-labelledby="settings-heading">
+        <div class="settings-top-bar">
+          <button
+            id="btn-settings-back"
+            type="button"
+            class="btn btn--secondary btn--sm settings-back-btn"
+            data-jump-view="profile"
+          >
+            ← Back to Profile
+          </button>
+        </div>
+
+        <div class="section-head">
+          <span class="welcome-kicker">Preferences</span>
+          <h1 id="settings-heading" class="section-title">Settings</h1>
+          <p class="section-subtitle">
+            Customize audio, motion, and installation options on this device.
+          </p>
+        </div>
+
+        <div class="settings-stack">
+          <!-- A. Sound & Effects -->
+          <article class="card settings-card" aria-labelledby="settings-sound-heading">
+            <div class="settings-card-head">
+              <div>
+                <h2 id="settings-sound-heading" class="settings-card-title">Sound &amp; Effects</h2>
+                <p class="settings-card-subtitle">
+                  Web Audio taps, chimes, and feedback sounds.
+                </p>
+              </div>
+              <span id="settings-sound-state" class="pill pill--upcoming">Off</span>
+            </div>
+
+            <div class="settings-row">
+              <div class="settings-row-copy">
+                <span id="settings-sound-label" class="settings-row-label">Sound Effects</span>
+                <p id="settings-sound-desc" class="settings-row-desc">
+                  Synced with the top-bar SFX button and saved on this device.
+                </p>
+              </div>
+              <button
+                id="btn-settings-sound"
+                type="button"
+                class="settings-switch"
+                role="switch"
+                aria-checked="false"
+                aria-labelledby="settings-sound-label"
+                aria-describedby="settings-sound-desc"
+              >
+                <span class="settings-switch-track" aria-hidden="true">
+                  <span class="settings-switch-thumb"></span>
+                </span>
+              </button>
+            </div>
+          </article>
+
+          <!-- B. Accessibility & Motion -->
+          <article class="card settings-card" aria-labelledby="settings-motion-heading">
+            <div class="settings-card-head">
+              <div>
+                <h2 id="settings-motion-heading" class="settings-card-title">Accessibility &amp; Motion</h2>
+                <p class="settings-card-subtitle">
+                  Control micro-animations and decorative effects.
+                </p>
+              </div>
+              <span id="settings-motion-state" class="pill pill--upcoming">Off</span>
+            </div>
+
+            <div class="settings-row">
+              <div class="settings-row-copy">
+                <span id="settings-motion-label" class="settings-row-label">Reduce Animations</span>
+                <p id="settings-motion-desc" class="settings-row-desc">
+                  Disables button pops, spark bursts, and interface transitions.
+                </p>
+              </div>
+              <button
+                id="btn-settings-motion"
+                type="button"
+                class="settings-switch"
+                role="switch"
+                aria-checked="false"
+                aria-labelledby="settings-motion-label"
+                aria-describedby="settings-motion-desc settings-motion-os-note"
+              >
+                <span class="settings-switch-track" aria-hidden="true">
+                  <span class="settings-switch-thumb"></span>
+                </span>
+              </button>
+            </div>
+
+            <div
+              id="settings-motion-os-note"
+              class="settings-os-note"
+              role="status"
+              aria-live="polite"
+              hidden
+            >
+              Enabled by your device's Reduce Motion setting.
+            </div>
+          </article>
+
+          <!-- C. Install PartyVerse -->
+          <article class="card settings-card" aria-labelledby="settings-install-heading">
+            <div class="settings-card-head">
+              <div>
+                <h2 id="settings-install-heading" class="settings-card-title">Install PartyVerse</h2>
+                <p class="settings-card-subtitle">
+                  Pin PartyVerse to your Android home screen for faster access.
+                </p>
+              </div>
+              <span class="pill pill--cyan">Android Chrome</span>
+            </div>
+
+            <ol class="settings-install-steps">
+              <li>Open PartyVerse in Chrome on Android.</li>
+              <li>Tap the three-dot menu.</li>
+              <li>Select &ldquo;Add to Home screen&rdquo; or &ldquo;Install app&rdquo; if available.</li>
+              <li>Confirm the installation.</li>
+            </ol>
+
+            <button
+              id="btn-install-pwa"
+              type="button"
+              class="btn btn--primary btn--full"
+              hidden
+            >
+              Install PartyVerse App
+            </button>
+
+            <div
+              id="settings-install-status"
+              class="inline-feedback"
+              role="status"
+              aria-live="polite"
+              hidden
+            ></div>
+          </article>
+
+          <!-- D. About PartyVerse -->
+          <article class="card settings-card settings-about-card" aria-labelledby="settings-about-heading">
+            <div class="settings-about-head">
+              <div class="settings-about-logo-wrap" aria-hidden="true">
+                <img
+                  src="./assets/logo/portal-symbol.svg"
+                  alt=""
+                  class="settings-about-logo"
+                  width="42"
+                  height="42"
+                />
+              </div>
+              <div class="settings-about-identity">
+                <h2 id="settings-about-heading" class="settings-about-name">PartyVerse</h2>
+                <p class="settings-about-tagline">Play Together. Win Together.</p>
+              </div>
+            </div>
+            <p class="settings-about-desc">
+              Play with friends using instant guest access. No manual account registration is required.
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <!-- Fixed Bottom Navigation (Mobile & Tablet < 1024px) -->
+    <nav class="bottom-nav" aria-label="Primary mobile navigation">
+      <div class="bottom-nav-inner">
+        <button type="button" class="nav-btn is-active" data-view="lobby" aria-current="page">
+          <span class="nav-icon" aria-hidden="true">🏠</span>
+          <span class="nav-label">Lobby</span>
+        </button>
+        <button type="button" class="nav-btn" data-view="games">
+          <span class="nav-icon" aria-hidden="true">🎮</span>
+          <span class="nav-label">Games</span>
+        </button>
+        <button type="button" class="nav-btn" data-view="profile">
+          <span class="nav-icon" aria-hidden="true">👤</span>
+          <span class="nav-label">Profile</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Game Details / Coming Soon Bottom Sheet & Modal -->
+  <div id="game-detail-modal" class="app-modal-backdrop" hidden>
+    <div
+      class="app-modal-sheet"
+      role="dialog"
